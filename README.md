@@ -41,21 +41,9 @@
 
 ## Как запускать
 
-Чтобы запустить все вместе достаточно сделать `docker-compose up`. По отдельности:
-
-### Модель
-
-Модель можно поднять через `docker-compose -f docker-compose-app.yml up --build <variant>`, где `variant` это `app`или `app-gpu` 
-
-Также мы написали accuracy и performance тесты для модели - их можно запустить `docker-compose -f docker-compose-test.yml up --build <variant>`, где `variant` это `test`или `test-gpu`
-
 ### Веб-приложение
 
 Сделать `make up` в корневой директории
 
 Можно использовать .env.example в /ml-test и в /backend, чтобы определить переменные для подключение к Kafka и PostgresSQL
 Это нужно при запуске приложения не через `docker-compose`
-
-## Другие комментарии
-
-Мы подготовили ноутбуки для повторного обучения моделей. Их можно найти в папке `./model_trainer`
