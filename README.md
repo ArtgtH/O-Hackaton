@@ -5,34 +5,6 @@
 1. [Видео с демонстрацией UI](https://drive.google.com/file/d/1HUae6sPYIHdbCdbew8UrupCY-CAXPMz9/view?usp=sharing)
 2. [Презентация решения](https://github.com/ostrovok-hackathon-2024/fullstack-excel/blob/1c441ab47c09d58de207649f74998590c06d8e2d/presentation_FullStack.pdf)
 
-## Докер приколы
-Контейнер для гпу - DockerfileGPU
-
-Контейнер для цпу - Dockerfile
-
-Чтобы запустить:
-
-docker build -f DockerfileGPU -t GPUtest
-
-docker build -f Dockerfile -t test
-
-
-## Небольшое уточнение
-
-Из-за того что мы не могли со 100% уверенностью потрогать вашу виртуалку есть риски того, что будут проблемы с настройкой GPU. Если мы вдруг начнем помирать с километровыми логами - замените в app/requirements.txt 
-
-```
-optimum[onnxruntime-gpu]
-onnxruntime-gpu
-```
-
-на 
-
-```
-optimum[onnxruntime]
-onnxruntime
-```
-
 ## Описание решения
 
 Наше решение основано на использовании простых методов работы с текстом и ускорении языковых моделей с помощью **ONNX**. Мы не ограничились одной лишь моделью - мы написали веб-приложение с бэкендом на **Golang** для демонстрации взаимодействия с моделью и интеграции модели в ваши сервисы. Все это можно посмотреть и потрогать через фронтенд.
@@ -58,8 +30,6 @@ onnxruntime
 Пояснение: En Suite Bathroom - совмещенный санузел
 
 ### Анализ скорости
-
-В `app/tests/test_speed.py` лежит бенчмарк. Замеры производились на датасете из 2400 строк внутри докер контейнера на умирающем ноутбуке без GPU, поэтому число OPS-ов нерепрезентативно. 
 
 
 | Операция       | Single/Multiple | OPS (Light вариант) | OPS (Full вариант) |
