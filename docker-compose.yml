@@ -1,0 +1,101 @@
+services:
+  frontend:
+    build: frontend/
+    container_name: frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+    networks:
+      - dev
+
+  backend:
+    build: backend/
+    container_name: backend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: "postgres"
+      DB_NAME: "ML"
+      DB_USER: "postgres"
+      DB_PASSWORD: "postgres"
+      DB_PORT: "5432"
+      KAFKA_BROKERS: "kafka:9092"
+    depends_on:
+      - postgres
+      - kafka
+    networks:
+      - dev
+
+  ml:
+    build: ml/
+    container_name: ml
+    restart: unless-stopped
+    depends_on:
+      - kafka
+    networks:
+      - dev
+    environment:
+      KAFKA_BROKERS: "kafka:9092"
+
+  postgres:
+    image: postgres:16
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "ML"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - dev
+
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    environment:
+      ZOO_PORT_NUMBER: 2181
+      ZOO_TICK_TIME: 2000
+      ALLOW_ANONYMOUS_LOGIN: "yes"
+    networks:
+      - dev
+
+
+  kafka:
+    image: bitnami/kafka:latest
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_BROKER_ID: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    depends_on:
+      - zookeeper
+    networks:
+      - dev
+
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+    volumes:
+      - "./nginx.conf:/etc/nginx/nginx.conf"
+      - "/etc/letsencrypt:/etc/letsencrypt"
+    networks:
+      - dev
+
+volumes:
+  postgres_data:
+
+networks:
+  dev:

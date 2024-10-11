@@ -1,0 +1,27 @@
+class: 
+  path: storage/class_model.pkl
+  format: pickle
+quality: 
+  path: storage/quality_model.pkl
+  format: pickle
+bathroom: 
+  path: storage/bathroom_model.pkl
+  format: pickle
+bedding:
+  path: storage/bedding
+  format: onnx
+view:
+  path: storage/view
+  format: onnx
+capacity:
+  path: storage/capacity
+  format: onnx
+club:
+  path: storage/club_model.pkl
+  format: pickle
+tfidf:
+  path: storage/tfidf_vectorizer.pkl
+  format: pickle
+count:
+  path: storage/count_vectorizer.pkl
+  format: pickle
